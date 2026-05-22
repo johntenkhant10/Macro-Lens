@@ -484,7 +484,7 @@ function SavedView({ preBuilds, onLog, onCreate, onDelete }: any) {
                  <p className="text-[14px] text-[var(--color-steel)] font-medium"><span className="text-[var(--color-slate)]">{food.calories}</span> kcal • <span className="text-[var(--color-slate)]">{food.protein}</span>g pro</p>
                </div>
                <div className="flex items-center gap-2 shrink-0">
-                 <button onClick={() => onLog(food)} className="bg-[var(--color-card-tint-lavender)] text-[#6B4B9A] px-[14px] py-[8px] rounded-[var(--radius-sm)] text-[14px] font-semibold hover:bg-[var(--color-primary)] hover:text-white transition-colors active:scale-95">Log</button>
+                 <button onClick={() => onLog(food)} className="bg-[var(--color-card-tint-lavender)] text-[var(--color-primary)] px-[14px] py-[8px] rounded-[var(--radius-sm)] text-[14px] font-semibold hover:bg-[var(--color-primary)] hover:text-white transition-colors active:scale-95">Log</button>
                  <button onClick={() => onDelete(food.id)} className="text-[var(--color-muted)] hover:text-[var(--color-semantic-error)] p-1.5 rounded-full transition-colors active:bg-[var(--color-surface)]">
                     <Trash2 className="w-[18px] h-[18px]" />
                  </button>

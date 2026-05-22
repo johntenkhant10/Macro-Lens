@@ -12,40 +12,40 @@
   --color-primary-pressed: #8852B8;
   --color-primary-deep: #7743A5;
   
-  --color-link-blue: #2EA2D5;
-  --color-link-blue-pressed: #2280AA;
+  --color-link-blue: #40B0E0;
+  --color-link-blue-pressed: #2EA2D5;
   
-  --color-canvas: #FFFFFF;
-  --color-surface: #F9F8F6;
-  --color-surface-soft: #F1F0EE;
+  --color-canvas: #0A0C10;
+  --color-surface: #12151C;
+  --color-surface-soft: #1A1F29;
   
-  --color-hairline: #E5E5E5;
-  --color-hairline-soft: #F2F2F2;
-  --color-hairline-strong: #D9D9D9;
+  --color-hairline: #262D3D;
+  --color-hairline-soft: #1A1F29;
+  --color-hairline-strong: #364057;
   
-  --color-ink-deep: #0F0F0F;
-  --color-ink: #1F1F1F;
-  --color-charcoal: #37352F;
-  --color-slate: #5A5A5A;
-  --color-steel: #7A7A7A;
-  --color-stone: #9C9B98;
-  --color-muted: #D1D1D1;
+  --color-ink-deep: #FFFFFF;
+  --color-ink: #F2F4F8;
+  --color-charcoal: #E2E8F0;
+  --color-slate: #94A3B8;
+  --color-steel: #64748B;
+  --color-stone: #475569;
+  --color-muted: #334155;
   --color-on-dark: #FFFFFF;
   --color-on-dark-muted: rgba(255, 255, 255, 0.6);
 
-  --color-card-tint-peach: #FFEBE1;
-  --color-card-tint-rose: #FFE1E8;
-  --color-card-tint-mint: #E1F8ED;
-  --color-card-tint-lavender: #EFEDFE;
-  --color-card-tint-sky: #E7F3F8;
-  --color-card-tint-yellow: #FFF5D0;
-  --color-card-tint-yellow-bold: #FFD868;
-  --color-card-tint-cream: #FDF9EC;
-  --color-card-tint-gray: #F2F1EE;
+  --color-card-tint-peach: rgba(255, 138, 101, 0.15);
+  --color-card-tint-rose: rgba(240, 98, 146, 0.15);
+  --color-card-tint-mint: rgba(77, 182, 172, 0.15);
+  --color-card-tint-lavender: rgba(149, 117, 205, 0.15);
+  --color-card-tint-sky: rgba(79, 195, 247, 0.15);
+  --color-card-tint-yellow: rgba(255, 213, 79, 0.15);
+  --color-card-tint-yellow-bold: #FFD54F;
+  --color-card-tint-cream: rgba(255, 255, 255, 0.05);
+  --color-card-tint-gray: rgba(255, 255, 255, 0.05);
 
-  --color-semantic-success: #33A852;
-  --color-semantic-warning: #FFA000;
-  --color-semantic-error: #EB5757;
+  --color-semantic-success: #4CAF50;
+  --color-semantic-warning: #FFB300;
+  --color-semantic-error: #EF5350;
 
   --radius-xs: 4px;
   --radius-sm: 6px;

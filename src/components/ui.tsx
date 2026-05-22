@@ -84,8 +84,8 @@ export function Badge({
     purple: "bg-[var(--color-primary)] text-[var(--color-on-dark)] px-[10px] py-[4px] text-[13px] leading-[1.4]",
     pink: "bg-[var(--color-brand-pink)] text-[var(--color-on-dark)] px-[10px] py-[4px] text-[13px] leading-[1.4]",
     orange: "bg-[var(--color-brand-orange)] text-[var(--color-on-dark)] px-[10px] py-[4px] text-[13px] leading-[1.4]",
-    "tag-purple": "bg-[var(--color-card-tint-lavender)] text-[#6B4B9A] px-[8px] py-[2px] text-[13px] rounded-[var(--radius-sm)]",
-    "tag-green": "bg-[var(--color-card-tint-mint)] text-[#1C7345] px-[8px] py-[2px] text-[13px] rounded-[var(--radius-sm)]",
+    "tag-purple": "bg-[var(--color-card-tint-lavender)] text-[var(--color-primary)] px-[8px] py-[2px] text-[13px] rounded-[var(--radius-sm)]",
+    "tag-green": "bg-[var(--color-card-tint-mint)] text-[var(--color-semantic-success)] px-[8px] py-[2px] text-[13px] rounded-[var(--radius-sm)]",
   };
 
   return (
