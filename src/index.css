@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-navy: #0F1219;
+  --color-brand-navy-deep: #080A0E;
+  --color-brand-navy-mid: #161A23;
+  
+  --color-primary: #9F65D6;
+  --color-primary-pressed: #8852B8;
+  --color-primary-deep: #7743A5;
+  
+  --color-link-blue: #2EA2D5;
+  --color-link-blue-pressed: #2280AA;
+  
+  --color-canvas: #FFFFFF;
+  --color-surface: #F9F8F6;
+  --color-surface-soft: #F1F0EE;
+  
+  --color-hairline: #E5E5E5;
+  --color-hairline-soft: #F2F2F2;
+  --color-hairline-strong: #D9D9D9;
+  
+  --color-ink-deep: #0F0F0F;
+  --color-ink: #1F1F1F;
+  --color-charcoal: #37352F;
+  --color-slate: #5A5A5A;
+  --color-steel: #7A7A7A;
+  --color-stone: #9C9B98;
+  --color-muted: #D1D1D1;
+  --color-on-dark: #FFFFFF;
+  --color-on-dark-muted: rgba(255, 255, 255, 0.6);
+
+  --color-card-tint-peach: #FFEBE1;
+  --color-card-tint-rose: #FFE1E8;
+  --color-card-tint-mint: #E1F8ED;
+  --color-card-tint-lavender: #EFEDFE;
+  --color-card-tint-sky: #E7F3F8;
+  --color-card-tint-yellow: #FFF5D0;
+  --color-card-tint-yellow-bold: #FFD868;
+  --color-card-tint-cream: #FDF9EC;
+  --color-card-tint-gray: #F2F1EE;
+
+  --color-semantic-success: #33A852;
+  --color-semantic-warning: #FFA000;
+  --color-semantic-error: #EB5757;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-xxl: 20px;
+  --radius-xxxl: 24px;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Macro Lens",
+  "description": "An AI camera app for tracking nutrition, calories, and protein by snapping photos of food.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
