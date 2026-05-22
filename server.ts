@@ -4,7 +4,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || "AIzaSyDEOy7LlIK-cxEmzgMwGqKNEJW-rw0M944",
+  apiKey: process.env.GEMINI_API_KEY || "AIzaSyAlDbIhfQFQnD8Ld3A8H_WR5pV60k1S-0A",
   httpOptions: {
     headers: {
       "User-Agent": "aistudio-build",
@@ -52,7 +52,7 @@ ${prompt ? `Additional context from user: ${prompt}` : "Please be as accurate as
       parts.push({ text: textPrompt });
 
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-2.0-flash",
         contents: { parts },
         config: {
           responseMimeType: "application/json",

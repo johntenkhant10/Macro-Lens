@@ -237,12 +237,12 @@ export default function App() {
 
       {/* Camera / Prompt View */}
       {view === "camera" && (
-        <div className="flex-1 flex flex-col bg-[var(--color-brand-navy)] h-full absolute inset-0 z-50">
-          <div className="px-4 h-[64px] flex items-center text-[var(--color-on-dark)] shrink-0 z-10 relative">
+        <div className="flex-1 flex flex-col bg-[var(--color-brand-navy)] h-full absolute inset-0 z-50 pb-[env(safe-area-inset-bottom,0px)]">
+          <div className="px-4 pb-4 pt-[max(env(safe-area-inset-top,40px),48px)] flex items-center text-[var(--color-on-dark)] shrink-0 z-10 relative">
             <button onClick={resetFlow} className="p-2 -ml-2 rounded-full hover:bg-[var(--color-on-dark-muted)]/20 transition-colors">
               <ChevronLeft className="w-6 h-6" />
             </button>
-            <h2 className="text-[18px] font-medium ml-2">Analyze Food</h2>
+            <h2 className="text-[18px] font-medium ml-2">{scanMode === "barcode" ? "Scan Barcode" : "Analyze Food"}</h2>
           </div>
           
           <div className="flex-1 flex flex-col items-center justify-center relative overflow-hidden px-4 py-6">
@@ -294,7 +294,7 @@ export default function App() {
       {view === "result" && scanResult && (
         <div className="flex-1 flex flex-col bg-[var(--color-surface)] h-full absolute inset-0 z-50 overflow-y-auto pb-[env(safe-area-inset-bottom,0px)]">
           {/* Header */}
-          <div className="bg-[var(--color-canvas)] px-4 h-[64px] flex items-center border-b border-[var(--color-hairline)] shrink-0 sticky top-0 z-20">
+          <div className="bg-[var(--color-canvas)] px-4 pb-4 pt-[max(env(safe-area-inset-top,20px),24px)] flex items-center border-b border-[var(--color-hairline)] shrink-0 sticky top-0 z-20">
             <button onClick={() => setView("camera")} className="p-2 -ml-2 rounded-full hover:bg-[var(--color-surface-soft)] transition-colors text-[var(--color-ink)]">
               <ChevronLeft className="w-6 h-6" />
             </button>
