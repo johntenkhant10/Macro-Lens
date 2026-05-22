@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo } from "react";
-import { Camera, ChevronLeft, Trash2, Home as HomeIcon, PieChart, Loader2, History, Bookmark, PlusCircle, Utensils } from "lucide-react";
+import { Camera, ChevronLeft, Trash2, Home as HomeIcon, PieChart, Loader2, History, Bookmark, PlusCircle, Utensils, Barcode, Edit2, X } from "lucide-react";
 import { format, isToday, isYesterday } from "date-fns";
 import { Button, Badge, Input } from "./components/ui";
 import { useFoodLog, usePreBuiltFoods } from "./useFoodLog";
@@ -19,6 +19,9 @@ export default function App() {
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState("");
+  
+  const [scanMode, setScanMode] = useState<"food" | "barcode">("food");
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
 
   const [editingLogId, setEditingLogId] = useState<string | null>(null);
 
@@ -61,7 +64,7 @@ export default function App() {
       const res = await fetch("/api/scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: capturedImage, prompt }),
+        body: JSON.stringify({ image: capturedImage, prompt, mode: scanMode }),
       });
       const data = await res.json();
 
@@ -132,7 +135,7 @@ export default function App() {
       {view === "home" && (
         <div className="flex-1 flex flex-col pb-28 overflow-y-auto w-full">
           {/* Header */}
-          <div className="bg-[var(--color-brand-navy)] shrink-0 pt-12 pb-6 px-6 sm:px-8 text-[var(--color-on-dark)] rounded-b-[24px] shadow-[0_24px_48px_-8px_rgba(15,15,15,0.2)] z-10 relative overflow-hidden">
+          <div className="bg-[var(--color-brand-navy)] shrink-0 pt-[max(env(safe-area-inset-top,40px),48px)] pb-6 px-6 sm:px-8 text-[var(--color-on-dark)] rounded-b-[24px] shadow-[0_24px_48px_-8px_rgba(15,15,15,0.2)] z-10 relative overflow-hidden">
             <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
             <div className="relative z-10 flex items-center justify-between mb-8">
               <h1 className="text-[28px] font-semibold tracking-tight">Macro Lens</h1>
@@ -348,7 +351,55 @@ export default function App() {
 
       {/* Fixed Bottom Navigation */}
       {["home", "history", "saved", "stats"].includes(view) && (
-        <BottomNav view={view} setView={setView} onScan={() => fileInputRef.current?.click()} />
+        <BottomNav view={view} setView={setView} onOpenActions={() => setIsActionMenuOpen(true)} />
+      )}
+
+      {/* Action Menu Overlay */}
+      {isActionMenuOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end">
+          <div className="absolute inset-0 bg-[var(--color-canvas)]/80 backdrop-blur-sm" onClick={() => setIsActionMenuOpen(false)}></div>
+          <div className="relative bg-[var(--color-surface)] w-full w-full mx-auto max-w-sm rounded-t-[32px] p-6 pb-[calc(env(safe-area-inset-bottom,24px)+24px)] flex flex-col gap-3 shadow-[0_-8px_32px_rgba(0,0,0,0.5)] border border-[var(--color-hairline)]">
+             <div className="w-12 h-1.5 bg-[var(--color-hairline-strong)] rounded-full mx-auto mb-6 opacity-50"></div>
+             
+             <div className="text-center mb-6">
+                <h3 className="text-[20px] font-semibold text-[var(--color-ink)]">Add Log</h3>
+             </div>
+
+             <button onClick={() => { setScanMode('food'); setIsActionMenuOpen(false); fileInputRef.current?.click(); }} className="flex items-center gap-4 p-4 rounded-[var(--radius-lg)] bg-[var(--color-canvas)] border border-[var(--color-hairline)] hover:border-[var(--color-primary)]/50 active:scale-[0.98] transition-all">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-card-tint-peach)] flex items-center justify-center shrink-0">
+                   <Camera className="w-6 h-6 text-[#E86C45]" />
+                </div>
+                <div className="flex-1 text-left">
+                   <h4 className="font-semibold text-[16px]">Snap Meal</h4>
+                   <p className="text-[13px] text-[var(--color-slate)] font-medium">Auto-estimate with AI</p>
+                </div>
+             </button>
+
+             <button onClick={() => { setScanMode('barcode'); setIsActionMenuOpen(false); fileInputRef.current?.click(); }} className="flex items-center gap-4 p-4 rounded-[var(--radius-lg)] bg-[var(--color-canvas)] border border-[var(--color-hairline)] hover:border-[var(--color-primary)]/50 active:scale-[0.98] transition-all">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-card-tint-sky)] flex items-center justify-center shrink-0">
+                   <Barcode className="w-6 h-6 text-[#40B0E0]" />
+                </div>
+                <div className="flex-1 text-left">
+                   <h4 className="font-semibold text-[16px]">Scan Label / Barcode</h4>
+                   <p className="text-[13px] text-[var(--color-slate)] font-medium">Read nutritional facts</p>
+                </div>
+             </button>
+
+             <button onClick={() => { setIsActionMenuOpen(false); setView('create-log'); }} className="flex items-center gap-4 p-4 rounded-[var(--radius-lg)] bg-[var(--color-canvas)] border border-[var(--color-hairline)] hover:border-[var(--color-primary)]/50 active:scale-[0.98] transition-all">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-card-tint-lavender)] flex items-center justify-center shrink-0">
+                   <Edit2 className="w-6 h-6 text-[var(--color-primary)]" />
+                </div>
+                <div className="flex-1 text-left">
+                   <h4 className="font-semibold text-[16px]">Manual Entry</h4>
+                   <p className="text-[13px] text-[var(--color-slate)] font-medium">Type details yourself</p>
+                </div>
+             </button>
+             
+             <button onClick={() => setIsActionMenuOpen(false)} className="mt-4 p-4 flex items-center justify-center text-[var(--color-slate)] active:scale-95 transition-all">
+                 <X className="w-6 h-6" />
+             </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -358,35 +409,37 @@ export default function App() {
    Sub-Views & Components
    ===================================================================== */
 
-function BottomNav({ view, setView, onScan }: { view: string, setView: (v: any) => void, onScan: () => void }) {
+function BottomNav({ view, setView, onOpenActions }: { view: string, setView: (v: any) => void, onOpenActions: () => void }) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-[80px] pb-[env(safe-area-inset-bottom,0px)] bg-[var(--color-canvas)] border-t border-[var(--color-hairline)] flex justify-around items-center px-2 sm:px-6 z-40 bg-opacity-95 backdrop-blur-md">
-      <button onClick={() => setView('home')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${view === 'home' ? 'text-[var(--color-primary)]' : 'text-[var(--color-stone)] hover:text-[var(--color-slate)]'}`}>
-        <HomeIcon className="w-6 h-6" />
-        <span className="text-[10px] font-semibold tracking-wide">Home</span>
-      </button>
-      
-      <button onClick={() => setView('history')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${view === 'history' ? 'text-[var(--color-primary)]' : 'text-[var(--color-stone)] hover:text-[var(--color-slate)]'}`}>
-        <History className="w-6 h-6" />
-        <span className="text-[10px] font-semibold tracking-wide">History</span>
-      </button>
-
-      <div className="relative -mt-8 flex justify-center w-[72px] shrink-0">
-        <button onClick={onScan} className="bg-[var(--color-primary)] text-[var(--color-on-dark)] h-[60px] w-[60px] rounded-full flex items-center justify-center shadow-[0_8px_24px_rgba(159,101,214,0.4)] hover:shadow-[0_12px_28px_rgba(159,101,214,0.5)] active:scale-95 transition-all outline-none">
-          <Camera className="w-[28px] h-[28px]" />
+    <div className="fixed bottom-[env(safe-area-inset-bottom,24px)] left-4 right-4 z-40 flex justify-center">
+      <nav className="h-[72px] bg-[#06332c] rounded-[36px] flex justify-between items-center px-4 shadow-[0_16px_32px_rgba(0,0,0,0.4)] backdrop-blur-md w-full max-w-sm">
+        <button onClick={() => setView('home')} className="relative flex flex-col items-center justify-center w-12 h-12 transition-all duration-300 group">
+          <HomeIcon className={`w-[22px] h-[22px] ${view === 'home' ? 'text-white' : 'text-[#6A9A92] group-hover:text-[#90C7BF]'}`} />
+          {view === 'home' && <div className="absolute -bottom-1 w-[4px] h-[4px] rounded-full bg-white"></div>}
         </button>
-      </div>
+        
+        <button onClick={() => setView('history')} className="relative flex flex-col items-center justify-center w-12 h-12 transition-all duration-300 group">
+          <History className={`w-[22px] h-[22px] ${view === 'history' ? 'text-white' : 'text-[#6A9A92] group-hover:text-[#90C7BF]'}`} />
+          {view === 'history' && <div className="absolute -bottom-1 w-[4px] h-[4px] rounded-full bg-white"></div>}
+        </button>
 
-      <button onClick={() => setView('saved')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${view === 'saved' ? 'text-[var(--color-primary)]' : 'text-[var(--color-stone)] hover:text-[var(--color-slate)]'}`}>
-        <Bookmark className="w-6 h-6" />
-        <span className="text-[10px] font-semibold tracking-wide">Saved</span>
-      </button>
-      
-      <button onClick={() => setView('stats')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${view === 'stats' ? 'text-[var(--color-primary)]' : 'text-[var(--color-stone)] hover:text-[var(--color-slate)]'}`}>
-        <PieChart className="w-6 h-6" />
-        <span className="text-[10px] font-semibold tracking-wide">Stats</span>
-      </button>
-    </nav>
+        <div className="relative flex justify-center w-[64px] shrink-0">
+          <button onClick={onOpenActions} className="bg-[#205149] text-white h-[50px] w-[50px] rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.2)] active:scale-95 transition-all outline-none">
+            <PlusCircle className="w-[26px] h-[26px]" />
+          </button>
+        </div>
+
+        <button onClick={() => setView('saved')} className="relative flex flex-col items-center justify-center w-12 h-12 transition-all duration-300 group">
+          <Bookmark className={`w-[22px] h-[22px] ${view === 'saved' ? 'text-white' : 'text-[#6A9A92] group-hover:text-[#90C7BF]'}`} />
+          {view === 'saved' && <div className="absolute -bottom-1 w-[4px] h-[4px] rounded-full bg-white"></div>}
+        </button>
+        
+        <button onClick={() => setView('stats')} className="relative flex flex-col items-center justify-center w-12 h-12 transition-all duration-300 group">
+          <PieChart className={`w-[22px] h-[22px] ${view === 'stats' ? 'text-white' : 'text-[#6A9A92] group-hover:text-[#90C7BF]'}`} />
+          {view === 'stats' && <div className="absolute -bottom-1 w-[4px] h-[4px] rounded-full bg-white"></div>}
+        </button>
+      </nav>
+    </div>
   );
 }
 
@@ -427,7 +480,7 @@ function HistoryView({ logs, onEditLog }: { logs: FoodItem[], onEditLog: (id: st
 
   return (
     <div className="flex-1 flex flex-col pb-28 overflow-y-auto bg-[var(--color-surface)] w-full">
-      <div className="bg-[var(--color-canvas)] px-6 py-5 border-b border-[var(--color-hairline)] sticky top-0 z-10 shadow-sm">
+      <div className="bg-[var(--color-canvas)] px-6 pb-5 pt-[max(env(safe-area-inset-top,20px),24px)] border-b border-[var(--color-hairline)] sticky top-0 z-10 shadow-sm">
         <h2 className="text-[22px] font-semibold tracking-tight">Activity Logs</h2>
       </div>
       <div className="p-5 space-y-8">
@@ -464,7 +517,7 @@ function HistoryView({ logs, onEditLog }: { logs: FoodItem[], onEditLog: (id: st
 function SavedView({ preBuilds, onLog, onCreate, onDelete }: any) {
   return (
     <div className="flex-1 flex flex-col pb-28 overflow-y-auto bg-[var(--color-surface)] w-full">
-      <div className="bg-[var(--color-canvas)] px-6 py-5 border-b border-[var(--color-hairline)] sticky top-0 z-10 flex justify-between items-center shadow-sm">
+      <div className="bg-[var(--color-canvas)] px-6 pb-5 pt-[max(env(safe-area-inset-top,20px),24px)] border-b border-[var(--color-hairline)] sticky top-0 z-10 flex justify-between items-center shadow-sm">
         <h2 className="text-[22px] font-semibold tracking-tight">Saved Foods</h2>
         <button onClick={onCreate} className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 p-[6px] -mr-2 rounded-full transition-colors active:scale-95">
           <PlusCircle className="w-6 h-6" />
@@ -518,7 +571,7 @@ function EditLogView({ logId, logs, onUpdate, onDelete, onBack }: any) {
 
   return (
     <div className="flex-1 flex flex-col bg-[var(--color-canvas)] overflow-y-auto z-50 absolute inset-0 pb-[env(safe-area-inset-bottom,0px)]">
-      <div className="px-4 h-[64px] flex items-center border-b border-[var(--color-hairline)] shrink-0 bg-[var(--color-canvas)] sticky top-0 z-20">
+      <div className="px-4 pb-4 pt-[max(env(safe-area-inset-top,20px),24px)] flex items-center border-b border-[var(--color-hairline)] shrink-0 bg-[var(--color-canvas)] sticky top-0 z-20">
         <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-[var(--color-surface-soft)] transition-colors text-[var(--color-ink)]">
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -568,7 +621,7 @@ function CreateSavedView({ onSave, onBack }: any) {
 
   return (
     <div className="flex-1 flex flex-col bg-[var(--color-canvas)] overflow-y-auto z-50 absolute inset-0 pb-[env(safe-area-inset-bottom,0px)]">
-      <div className="px-4 h-[64px] flex items-center border-b border-[var(--color-hairline)] shrink-0 bg-[var(--color-canvas)] sticky top-0 z-20">
+      <div className="px-4 pb-4 pt-[max(env(safe-area-inset-top,20px),24px)] flex items-center border-b border-[var(--color-hairline)] shrink-0 bg-[var(--color-canvas)] sticky top-0 z-20">
         <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-[var(--color-surface-soft)] transition-colors text-[var(--color-ink)]">
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -619,7 +672,7 @@ function CreateManualLogView({ onSave, onBack }: any) {
 
   return (
     <div className="flex-1 flex flex-col bg-[var(--color-canvas)] overflow-y-auto z-50 absolute inset-0 pb-[env(safe-area-inset-bottom,0px)]">
-      <div className="px-4 h-[64px] flex items-center border-b border-[var(--color-hairline)] shrink-0 bg-[var(--color-canvas)] sticky top-0 z-20">
+      <div className="px-4 pb-4 pt-[max(env(safe-area-inset-top,20px),24px)] flex items-center border-b border-[var(--color-hairline)] shrink-0 bg-[var(--color-canvas)] sticky top-0 z-20">
         <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-[var(--color-surface-soft)] transition-colors text-[var(--color-ink)]">
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -675,7 +728,7 @@ function StatsView({ logs }: { logs: FoodItem[] }) {
 
   return (
     <div className="flex-1 flex flex-col pb-28 overflow-y-auto bg-[var(--color-surface)] w-full">
-      <div className="bg-[var(--color-canvas)] px-6 py-5 border-b border-[var(--color-hairline)] sticky top-0 z-10 shadow-sm">
+      <div className="bg-[var(--color-canvas)] px-6 pb-5 pt-[max(env(safe-area-inset-top,20px),24px)] border-b border-[var(--color-hairline)] sticky top-0 z-10 shadow-sm">
         <h2 className="text-[22px] font-semibold tracking-tight">Last 7 Days</h2>
       </div>
       <div className="p-5 max-w-md mx-auto w-full space-y-6">

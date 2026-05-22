@@ -22,7 +22,7 @@ async function startServer() {
   // API Route for scanning food
   app.post("/api/scan", async (req, res) => {
     try {
-      const { image, prompt } = req.body; // image should be base64 data URI
+      const { image, prompt, mode } = req.body; // image should be base64 data URI
 
       if (!image) {
         return res.status(400).json({ error: "Missing image" });
@@ -41,14 +41,18 @@ async function startServer() {
         },
       ];
 
-      const textPrompt = `You are an expert nutritionist identifying food or scanning barcodes. 
-Given the image of this food or barcode, estimate its nutritional info (Calories and Protein in grams).
+      const textPrompt = mode === "barcode"
+        ? `You are an expert nutritionist scanning a barcode or product nutrition label from an image. 
+Please carefully read the image and identify the EXACT product name, along with its nutritional info (Calories and Protein in grams).
+${prompt ? `Additional context from user: ${prompt}` : ""}`
+        : `You are an expert nutritionist identifying food from an image. 
+Given the image of this food, estimate its nutritional info (Calories and Protein in grams).
 ${prompt ? `Additional context from user: ${prompt}` : "Please be as accurate as possible."}`;
 
       parts.push({ text: textPrompt });
 
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: { parts },
         config: {
           responseMimeType: "application/json",
