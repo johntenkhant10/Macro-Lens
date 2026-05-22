@@ -4,7 +4,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || "AIzaSyAlDbIhfQFQnD8Ld3A8H_WR5pV60k1S-0A",
+  apiKey: process.env.GEMINI_API_KEY,
   httpOptions: {
     headers: {
       "User-Agent": "aistudio-build",
